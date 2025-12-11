@@ -1,2 +1,7 @@
+<<<<<<< HEAD
 /mvnw text eol=lf
 *.cmd text eol=crlf
+=======
+# Auto detect text files and perform LF normalization
+* text=auto
+>>>>>>> 090bc5a30d02edeea671d8acd48a2d3789b574f7
