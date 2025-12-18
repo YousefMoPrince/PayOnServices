@@ -18,10 +18,10 @@ public class BankAccount {
     private long account_id;
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private User userId;
     @ManyToOne
     @JoinColumn(name = "admin_id")
-    private Admin admin;
+    private Admin adminId;
     @Column(name = "bank_name", nullable = false,length = 100)
     private String bankName;
     @Column(name = "account_number", nullable = false,length = 16)

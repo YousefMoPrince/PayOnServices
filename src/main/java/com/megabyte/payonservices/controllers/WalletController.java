@@ -50,18 +50,22 @@ public class WalletController {
 
 
     @GetMapping("/wallet")
-    public ResponseEntity<?> getWallet(@RequestParam Long userId) {
-        Wallet wall = walletRepo.findByUser_UserId(userId)
-                .orElseThrow(() -> new RuntimeException("Wallet Not Found"));
+    public ApiResponse<WalletResponse> getWallet(@RequestParam Long userId) {
+        // 1. البحث عن المحفظة
+        return walletRepo.findByUser_UserId(userId)
+                .map(wall -> {
 
-        WalletResponse response = WalletResponse.builder()
-                .walletId(wall.getWalletId())
-                .userId(wall.getUser().getUserId())
-                .balance(wall.getBalance())
-                .build();
+                    WalletResponse response = WalletResponse.builder()
+                            .walletId(wall.getWalletId())
+                            .userId(wall.getUser().getUserId())
+                            .balance(wall.getBalance())
+                            .build();
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+                    return new ApiResponse<>("success", response);
+                })
+
+                .orElseGet(() -> new ApiResponse<>("Wallet Not Found", null));
+
+
     }
-
-
 }

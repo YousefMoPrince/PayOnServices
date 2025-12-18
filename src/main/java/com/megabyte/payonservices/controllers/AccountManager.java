@@ -35,26 +35,25 @@ private final UserRepo userRepo;
             .orElseThrow(() -> new RuntimeException("User not found"));
 
 
-    BankAccount bankAccount = BankAccount.builder().bankName(req.getBankName()).accountHolder(req.getAccountHolder()).accountNumber(req.getAccountNumber()).user(user).admin(admin).build();
+    BankAccount bankAccount = BankAccount.builder().bankName(req.getBankName()).accountHolder(req.getAccountHolder()).accountNumber(req.getAccountNumber()).userId(user).adminId(admin).build();
 accountRepo.save(bankAccount);
 BankResponse response = BankResponse.builder().bankName(req.getBankName()).accountHolder(req.getAccountHolder()).accountNumber(req.getAccountNumber()).build();
 return new ApiResponse<>("success", response);
 }
 
     @GetMapping("/findacc")
-    public ResponseEntity<?> findAccount(@RequestParam String accountNumber) {
-        BankAccount accnum = accountRepo.findOneByAccountNumber(accountNumber);
-        if (accnum == null) {
-            return new ResponseEntity<>("Account not found", HttpStatus.NOT_FOUND);
-        }
+    public ApiResponse<BankResponse> findAccount(@RequestParam Long userId) {
 
-        BankResponse response = BankResponse.builder()
-                .bankName(accnum.getBankName())
-                .accountHolder(accnum.getAccountHolder())
-                .accountNumber(accnum.getAccountNumber())
-                .build();
-
-        return ResponseEntity.ok(response);
+        return accountRepo.findByUserId_UserId(userId)
+                .map(accNum -> {
+                    BankResponse response = BankResponse.builder()
+                            .bankName(accNum.getBankName())
+                            .accountHolder(accNum.getAccountHolder())
+                            .accountNumber(accNum.getAccountNumber())
+                            .build();
+                    return new ApiResponse<>("success", response);
+                })
+                .orElseGet(() -> new ApiResponse<>("Account not found", null));
     }
 
 }
