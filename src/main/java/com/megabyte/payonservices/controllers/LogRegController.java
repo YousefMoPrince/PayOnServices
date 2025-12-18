@@ -32,7 +32,7 @@ public class LogRegController {
     }
         User user = User.builder().username(req.getUserName()).email(req.getEmail()).password(req.getPassword()).full_name(req.getFullName()).phone(req.getPhone()).build();
     userRepo.save(user);
-    UserResponse response = UserResponse.builder().userId(user.getUserId()).username(user.getUsername()).email(user.getEmail()).build();
+    UserResponse response = UserResponse.builder().userId(user.getUserId()).username(user.getUsername()).email(user.getEmail()).phone(user.getPhone()).password(user.getPassword()).build();
     return new ApiResponse<>("User registerd Successfully",response);
     }
 
@@ -46,7 +46,7 @@ public class LogRegController {
         if (!user.getPassword().equals(req.getPassword())) {
             return new ApiResponse<>("Incorrect password",null);
         }
-        UserResponse response = UserResponse.builder().userId(user.getUserId()).username(user.getUsername()).email(user.getEmail()).build();
+        UserResponse response = UserResponse.builder().userId(user.getUserId()).username(user.getUsername()).email(user.getEmail()).phone(user.getPhone()).password(user.getPassword()).build();
         return new ApiResponse<>("User logged in successfully",response);
     }
 }

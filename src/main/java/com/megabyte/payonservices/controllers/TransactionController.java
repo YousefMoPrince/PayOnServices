@@ -31,7 +31,7 @@ public class TransactionController {
         wallet.setBalance(wallet.getBalance().add(req.getAmount()));
         walletRepo.save(wallet);
         Transaction tx = Transaction.builder().fromUser(user).admin(admin).amount(req.getAmount())
-                .description(req.getDescription()).transaction_type(TransactionType.DEPOSIT).status(Status.PENDING)
+                .description(req.getDescription()).transaction_type(TransactionType.DEPOSIT).status(Status.COMPLETED)
                 .build();
         transactionRepo.save(tx);
         TransactionResponse response = TransactionResponse.builder().transaction_id(tx.getTransactionId())
