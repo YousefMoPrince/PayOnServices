@@ -10,8 +10,7 @@ import com.megabyte.payonservices.model.Admin;
 import com.megabyte.payonservices.model.User;
 import com.megabyte.payonservices.model.Wallet;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -51,7 +50,7 @@ public class WalletController {
 
     @GetMapping("/wallet")
     public ApiResponse<WalletResponse> getWallet(@RequestParam Long userId) {
-        // 1. البحث عن المحفظة
+
         return walletRepo.findByUser_UserId(userId)
                 .map(wall -> {
 
