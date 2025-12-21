@@ -1,9 +1,6 @@
 package com.megabyte.payonservices.controllers;
 
-import com.megabyte.payonservices.DTOs.ApiResponse;
-import com.megabyte.payonservices.DTOs.LoginRequest;
-import com.megabyte.payonservices.DTOs.RegisterRequest;
-import com.megabyte.payonservices.DTOs.UserResponse;
+import com.megabyte.payonservices.DTOs.*;
 import com.megabyte.payonservices.Repository.UserRepo;
 import com.megabyte.payonservices.model.User;
 import jakarta.validation.Valid;
@@ -13,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/LogReg")
@@ -48,5 +47,19 @@ public class LogRegController {
         }
         UserResponse response = UserResponse.builder().userId(user.getUserId()).username(user.getUsername()).email(user.getEmail()).phone(user.getPhone()).password(user.getPassword()).build();
         return new ApiResponse<>("User logged in successfully",response);
+    }
+    @PostMapping("/sync-contacts")
+    public ApiResponse<List<UserResponse>> syncContacts(@RequestBody ContactRequest req) {
+        List<UserResponse> registeredContacts = req.getContactNumbers().stream()
+                .map(userRepo::findByPhone)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .map(user -> UserResponse.builder()
+                        .userId(user.getUserId())
+                        .phone(user.getPhone())
+                        .build())
+                .collect(Collectors.toList());
+
+        return new ApiResponse<>("Contacts synced successfully", registeredContacts);
     }
 }
