@@ -28,5 +28,5 @@ public class AdminLog {
         }else {
             return ResponseEntity.status(401).body("Login Failed");
         }
-    }
+    }     
 }
